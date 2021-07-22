@@ -1,5 +1,8 @@
 <?php
 
+
+include_once 'resource/send-email-gmail.php';
+
 error_reporting( ~E_DEPRECATED & ~E_NOTICE );
 $servername = "localhost";
 $username = "root";
@@ -8,15 +11,13 @@ $password = "";
 try {
     $conn = new PDO("mysql:host=$servername;dbname=hwat", $username, $password);
     $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-    }
-catch(PDOException $e)
-    {
+}catch(PDOException $e){
     echo "Connection failed: " . $e->getMessage();
-    }
+}
 	
 	$c = $_POST['exportData'];
 	
-	if((isset($c['name'])) || (isset($c['phone'])) || (isset($c['message'])) ){
+	if((isset($c['name'])) && (isset($c['phone'])) && (isset($c['message'])) ){
 		
 		$name = trim($c['name']);
 		$name = strip_tags($name);
@@ -30,7 +31,11 @@ catch(PDOException $e)
 		$msg = strip_tags($msg);
 		$msg = htmlspecialchars($msg);
 		
+		date_default_timezone_set('Asia/Kolkata');
+        $t=time();
 		
+		#### Database Code
+		/**
 		$sql2 = "SELECT * FROM `feedback-hwat` WHERE hwat_phno = '$phno' AND hwat_message = '$msg' AND hwat_name = '$name'";
 		$res2 = $conn->prepare($sql2);
 		$res2->execute();
@@ -54,9 +59,47 @@ catch(PDOException $e)
 		}else{
 			echo "<div class='alert alert-danger failure'>Try again later !!!</b></div>";
 		}
-}
+		**/
+		
+		####Mail Code
+		
+		 $Cur_time = date("d-M-Y D,h:i:s A",$t);
+			$mail_body = '
+	<html>
+		<body style="font-family: Arial, Helvetica, sans-serif;line-height:1.8em;">
+		<hr>
+			<h2 align="center">AR builder`s</h2>
+		<hr>
+		<p style="margin: 15px;">Hey Team,<br><b>'.$name.'</b> has asked a query on '.$Cur_time.'</p><br>
+		
+		<table align="center">
+		    <tr style="background-color: yellow;font-size: large;font-weight: 600;"><td style="padding: 15px 175px;" colspan="2">Customer Details</td></tr>
+		    <tr><td style="padding: 17px 34px;font-weight: 600" >Name</td><td>'.$name.'</td></tr>
+		    <tr><td style="padding: 17px 34px;font-weight: 600" >Phone Number</td><td>'.$phno.'</td></tr>
+		    <tr><td style="padding: 17px 34px;font-weight: 600" >Mesage</td><td>'.$msg.'</td></tr>
+		</table>
+		<p style="margin: 15px;">Regards,<br><b>Website Bot</b><br>AR Builder&apos;s</p>
+		
+		<hr>
+		<p align="center"><strong>&copy;&nbsp;&nbsp;2021 Happie Webs and Tech&apos;s </strong></p>
+		<p> ------ Computer Generating mail ------ </p>
+		</body>
+</html>';
+
+							$mail->addAddress("rajuashwin1410@gmail.com"); #  $email is necessary BUT $username is optional..
+							$mail->Subject = "AR Website Bot - Messages";
+							$mail->Body = $mail_body;
+
+							if ($mail->Send()) {
+                                echo "<div class='alert alert-success'>We received your message {$name}, we'll get back to you as soon as possible. Thank for reaching out us !!!</div>";
+                                echo '<script type="text/javascript"> cleartext();  </script>';
+                    
+							}else{
+								echo "<div class='alert alert-danger failure'>Try again ! Something Wents wrong</div>";
+							}	
+		
 	}else{
-		echo "<div class='alert alert-danger failure'>Try again later !!!</b></div>";
+		echo "<div class='alert alert-danger failure'>Try again later !!!</div>";
 	}
 	
 	$conn->close;

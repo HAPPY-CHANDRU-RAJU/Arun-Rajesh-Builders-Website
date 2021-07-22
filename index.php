@@ -678,6 +678,12 @@ function whatsappMsg(){
 	window.open("https://wa.me/918861788961?text=Hi%20AR%20Builder's,%20I'm%20interested.%20Can%20you%20contact%20me%20asap...",'_blank');
 }
 
+function cleartext(){
+         document.getElementById('name').value = '';
+         document.getElementById('msg').value = '';
+         document.getElementById('phno').value = '';
+    }
+
 $('.contact-submit').click(function(e){
 		e.preventDefault();
 		
@@ -743,6 +749,12 @@ $('.contact-submit').click(function(e){
 			type : "POST",
 			url : "submit.php",
 			data : { 'exportData' : exportData },
+			beforeSend: function(){
+                $('.alert-box').html("<div class='alert alert-warning'>Mail Sending..... Wait for few seconds</div>");
+            },
+            complete: function(){
+                $('.alert-box').html("<div class='alert alert-success'>Thank You</div>");
+            },
 			success: function(data){
 			 	setTimeout(function(){
 			 		$('.alert-box').html(data);
