@@ -23,4 +23,4 @@ $mail->Password = "";
 $mail->IsHTML(true);
 $mail->SingleTo = true;
 
-$mail->setFrom('no.reply.happie@gmail.com', 'AR Builders - Website Bot'); #your email id
+$mail->setFrom('', 'AR Builders - Website Bot'); #your email id
