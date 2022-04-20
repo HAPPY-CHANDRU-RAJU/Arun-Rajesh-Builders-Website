@@ -18,7 +18,6 @@
 	<link rel="icon" href="assets/img/logo-sm.png" >
 		<title>AR Bulider's - Home page</title>
 		<style>
-	
 .headerText{
 	font-size: 2.2rem;
     color: #0c4d9cd4;
