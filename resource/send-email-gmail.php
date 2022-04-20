@@ -17,8 +17,8 @@ $mail->Host = 'smtp.gmail.com';
 $mail->Port = 587;
 
 //auth credential information
-$mail->Username = "no.reply.happie@gmail.com";
-$mail->Password = "D4ba23a1";
+$mail->Username = "";
+$mail->Password = "";
 
 $mail->IsHTML(true);
 $mail->SingleTo = true;
